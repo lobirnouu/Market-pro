@@ -1,280 +1,80 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 const monthlyData = [
-  { month: "يناير", sales: 12400, orders: 98, profit: 4100 },
-  { month: "فبراير", sales: 15800, orders: 124, profit: 5300 },
-  { month: "مارس", sales: 11200, orders: 87, profit: 3700 },
-  { month: "أبريل", sales: 18600, orders: 152, profit: 6200 },
-  { month: "مايو", sales: 21000, orders: 174, profit: 7100 },
-  { month: "يونيو", sales: 19400, orders: 161, profit: 6500 },
-  { month: "يوليو", sales: 23800, orders: 198, profit: 8000 },
-  { month: "أغسطس", sales: 20100, orders: 167, profit: 6700 },
-  { month: "سبتمبر", sales: 17500, orders: 143, profit: 5800 },
-  { month: "أكتوبر", sales: 25200, orders: 210, profit: 8500 },
-  { month: "نوفمبر", sales: 28900, orders: 241, profit: 9700 },
-  { month: "ديسمبر", sales: 31500, orders: 263, profit: 10600 },
+  { month: "يناير", مبيعات: 4000, أرباح: 2400 },
+  { month: "فبراير", مبيعات: 3000, أرباح: 1398 },
+  { month: "مارس", مبيعات: 5000, أرباح: 3200 },
+  { month: "أبريل", مبيعات: 4500, أرباح: 2800 },
+  { month: "مايو", مبيعات: 6000, أرباح: 3900 },
+  { month: "يونيو", مبيعات: 5500, أرباح: 3500 },
 ];
 
-const maxSales = Math.max(...monthlyData.map((d) => d.sales));
+const topProducts = [
+  { name: "لابتوب", مبيعات: 120 },
+  { name: "هاتف ذكي", مبيعات: 98 },
+  { name: "ساعة ذكية", مبيعات: 75 },
+  { name: "كاميرا", مبيعات: 60 },
+  { name: "سماعات", مبيعات: 45 },
+];
 
 export default function Reports() {
-  const [activeFilter, setActiveFilter] = useState("الكل");
-  const [exported, setExported] = useState(false);
-
-  const filters = ["الكل", "ربع سنوي", "نصف سنوي"];
-
-  const getFilteredData = () => {
-    if (activeFilter === "ربع سنوي") return monthlyData.slice(9, 12);
-    if (activeFilter === "نصف سنوي") return monthlyData.slice(6, 12);
-    return monthlyData;
-  };
-
-  const filtered = getFilteredData();
-  const totalSales = filtered.reduce((s, d) => s + d.sales, 0);
-  const totalOrders = filtered.reduce((s, d) => s + d.orders, 0);
-  const totalProfit = filtered.reduce((s, d) => s + d.profit, 0);
-
-  const handleExport = () => {
-    setExported(true);
-    setTimeout(() => setExported(false), 2500);
-  };
+  const navigate = useNavigate();
 
   return (
-    <div
-      dir="rtl"
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0f1117",
-        color: "#e2e8f0",
-        fontFamily: "'Segoe UI', Tahoma, sans-serif",
-        padding: "24px",
-      }}
-    >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "28px",
-          flexWrap: "wrap",
-          gap: "12px",
-        }}
-      >
-        <div>
-          <h1 style={{ fontSize: "22px", fontWeight: "700", margin: 0, color: "#f1f5f9" }}>
-            التقارير
-          </h1>
-          <p style={{ fontSize: "13px", color: "#64748b", margin: "4px 0 0" }}>
-            تحليل الأداء والمبيعات
-          </p>
+    <div dir="rtl" className="min-h-screen bg-gray-950 text-white font-sans">
+      <header className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between">
+        <h1 className="text-xl font-bold text-indigo-400">ماركت برو</h1>
+        <nav className="flex items-center gap-4 text-sm">
+          <button onClick={() => navigate("/")} className="text-gray-400 hover:text-white">الرئيسية</button>
+          <button className="text-indigo-400 font-semibold">التقارير</button>
+          <button onClick={() => navigate("/settings")} className="text-gray-400 hover:text-white">الإعدادات</button>
+          <button onClick={() => navigate("/login")} className="text-gray-400 hover:text-white">تسجيل الدخول</button>
+        </nav>
+      </header>
+
+      <main className="p-6 max-w-7xl mx-auto space-y-8">
+        <h2 className="text-2xl font-bold">التقارير</h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {[
+            { label: "إجمالي الإيرادات", value: "28,000 ر.س", color: "text-green-400" },
+            { label: "متوسط الطلب", value: "350 ر.س", color: "text-blue-400" },
+            { label: "معدل التحويل", value: "3.8%", color: "text-purple-400" },
+            { label: "العملاء الجدد", value: "124", color: "text-yellow-400" },
+          ].map((card) => (
+            <div key={card.label} className="bg-gray-900 rounded-xl p-4 border border-gray-800">
+              <p className="text-gray-400 text-sm">{card.label}</p>
+              <p className={`text-xl font-bold mt-1 ${card.color}`}>{card.value}</p>
+            </div>
+          ))}
         </div>
 
-        <button
-          onClick={handleExport}
-          style={{
-            backgroundColor: exported ? "#16a34a" : "#6366f1",
-            color: "#fff",
-            border: "none",
-            borderRadius: "10px",
-            padding: "10px 20px",
-            fontSize: "13px",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "background-color 0.3s",
-          }}
-        >
-          {exported ? "✓ تم التصدير" : "⬇ تصدير التقرير"}
-        </button>
-      </div>
-
-      {/* Filters */}
-      <div style={{ display: "flex", gap: "8px", marginBottom: "24px", flexWrap: "wrap" }}>
-        {filters.map((f) => (
-          <button
-            key={f}
-            onClick={() => setActiveFilter(f)}
-            style={{
-              padding: "7px 16px",
-              borderRadius: "8px",
-              border: "1px solid",
-              borderColor: activeFilter === f ? "#6366f1" : "#1e293b",
-              backgroundColor: activeFilter === f ? "#6366f1" : "#1e293b",
-              color: activeFilter === f ? "#fff" : "#94a3b8",
-              fontSize: "13px",
-              cursor: "pointer",
-              fontWeight: activeFilter === f ? "600" : "400",
-              transition: "all 0.2s",
-            }}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
-
-      {/* Summary Cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-          gap: "16px",
-          marginBottom: "28px",
-        }}
-      >
-        {[
-          { label: "إجمالي المبيعات", value: `${totalSales.toLocaleString()} ر.س`, icon: "💰", color: "#6366f1" },
-          { label: "إجمالي الطلبات", value: totalOrders.toLocaleString(), icon: "📦", color: "#0ea5e9" },
-          { label: "صافي الأرباح", value: `${totalProfit.toLocaleString()} ر.س`, icon: "📈", color: "#10b981" },
-        ].map((card) => (
-          <div
-            key={card.label}
-            style={{
-              backgroundColor: "#1e293b",
-              borderRadius: "14px",
-              padding: "20px",
-              borderTop: `3px solid ${card.color}`,
-            }}
-          >
-            <div style={{ fontSize: "24px", marginBottom: "8px" }}>{card.icon}</div>
-            <div style={{ fontSize: "12px", color: "#64748b", marginBottom: "4px" }}>
-              {card.label}
-            </div>
-            <div style={{ fontSize: "20px", fontWeight: "700", color: "#f1f5f9" }}>
-              {card.value}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Bar Chart */}
-      <div
-        style={{
-          backgroundColor: "#1e293b",
-          borderRadius: "14px",
-          padding: "24px",
-          marginBottom: "28px",
-        }}
-      >
-        <h2 style={{ fontSize: "15px", fontWeight: "600", marginBottom: "20px", color: "#f1f5f9" }}>
-          المبيعات الشهرية
-        </h2>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: "8px",
-            height: "160px",
-            overflowX: "auto",
-            paddingBottom: "8px",
-          }}
-        >
-          {monthlyData.map((d) => {
-            const height = Math.round((d.sales / maxSales) * 140);
-            const isInFilter = filtered.includes(d);
-            return (
-              <div
-                key={d.month}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: "4px",
-                  minWidth: "36px",
-                  flex: "1",
-                }}
-                title={`${d.month}: ${d.sales.toLocaleString()} ر.س`}
-              >
-                <div
-                  style={{
-                    width: "100%",
-                    height: `${height}px`,
-                    backgroundColor: isInFilter ? "#6366f1" : "#334155",
-                    borderRadius: "6px 6px 0 0",
-                    transition: "background-color 0.3s",
-                  }}
-                />
-                <span style={{ fontSize: "10px", color: "#64748b", whiteSpace: "nowrap" }}>
-                  {d.month.slice(0, 3)}
-                </span>
-              </div>
-            );
-          })}
+        <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
+          <h3 className="text-lg font-semibold mb-4">المبيعات والأرباح الشهرية</h3>
+          <ResponsiveContainer width="100%" height={250}>
+            <LineChart data={monthlyData}>
+              <XAxis dataKey="month" stroke="#6b7280" tick={{ fontSize: 12 }} />
+              <YAxis stroke="#6b7280" tick={{ fontSize: 12 }} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "none", borderRadius: "8px" }} />
+              <Line type="monotone" dataKey="مبيعات" stroke="#6366f1" strokeWidth={2} dot={false} />
+              <Line type="monotone" dataKey="أرباح" stroke="#10b981" strokeWidth={2} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
-      </div>
 
-      {/* Table */}
-      <div
-        style={{
-          backgroundColor: "#1e293b",
-          borderRadius: "14px",
-          padding: "24px",
-          overflowX: "auto",
-        }}
-      >
-        <h2 style={{ fontSize: "15px", fontWeight: "600", marginBottom: "16px", color: "#f1f5f9" }}>
-          تفاصيل التقرير
-        </h2>
-        <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "400px" }}>
-          <thead>
-            <tr style={{ borderBottom: "1px solid #334155" }}>
-              {["الشهر", "المبيعات", "الطلبات", "الأرباح"].map((h) => (
-                <th
-                  key={h}
-                  style={{
-                    padding: "10px 12px",
-                    textAlign: "right",
-                    fontSize: "12px",
-                    color: "#64748b",
-                    fontWeight: "600",
-                  }}
-                >
-                  {h}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((row, i) => (
-              <tr
-                key={row.month}
-                style={{
-                  borderBottom: "1px solid #0f1117",
-                  backgroundColor: i % 2 === 0 ? "transparent" : "#162032",
-                }}
-              >
-                <td style={{ padding: "10px 12px", fontSize: "13px", color: "#cbd5e1" }}>
-                  {row.month}
-                </td>
-                <td style={{ padding: "10px 12px", fontSize: "13px", color: "#a78bfa", fontWeight: "600" }}>
-                  {row.sales.toLocaleString()} ر.س
-                </td>
-                <td style={{ padding: "10px 12px", fontSize: "13px", color: "#38bdf8" }}>
-                  {row.orders}
-                </td>
-                <td style={{ padding: "10px 12px", fontSize: "13px", color: "#34d399" }}>
-                  {row.profit.toLocaleString()} ر.س
-                </td>
-              </tr>
-            ))}
-          </tbody>
-          <tfoot>
-            <tr style={{ borderTop: "2px solid #334155" }}>
-              <td style={{ padding: "12px", fontSize: "13px", fontWeight: "700", color: "#f1f5f9" }}>
-                الإجمالي
-              </td>
-              <td style={{ padding: "12px", fontSize: "13px", fontWeight: "700", color: "#a78bfa" }}>
-                {totalSales.toLocaleString()} ر.س
-              </td>
-              <td style={{ padding: "12px", fontSize: "13px", fontWeight: "700", color: "#38bdf8" }}>
-                {totalOrders}
-              </td>
-              <td style={{ padding: "12px", fontSize: "13px", fontWeight: "700", color: "#34d399" }}>
-                {totalProfit.toLocaleString()} ر.س
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+        <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
+          <h3 className="text-lg font-semibold mb-4">أفضل المنتجات مبيعاً</h3>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={topProducts} layout="vertical">
+              <XAxis type="number" stroke="#6b7280" tick={{ fontSize: 12 }} />
+              <YAxis type="category" dataKey="name" stroke="#6b7280" tick={{ fontSize: 12 }} width={80} />
+              <Tooltip contentStyle={{ backgroundColor: "#1f2937", border: "none", borderRadius: "8px" }} />
+              <Bar dataKey="مبيعات" fill="#6366f1" radius={[0, 4, 4, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      </main>
     </div>
   );
 }
