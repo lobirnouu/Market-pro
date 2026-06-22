@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import { useNavigate } from "react-router-dom";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 const salesData = [
   { month: "يناير", مبيعات: 4000 },
@@ -28,6 +29,7 @@ const campaigns = [
 export default function App() {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("الكل");
+  const navigate = useNavigate();
 
   const categories = ["الكل", "إلكترونيات", "إكسسوارات", "مكتبية"];
 
@@ -39,17 +41,17 @@ export default function App() {
 
   return (
     <div dir="rtl" className="min-h-screen bg-gray-950 text-white font-sans">
-      {/* الشريط العلوي */}
       <header className="bg-gray-900 border-b border-gray-800 px-6 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-indigo-400">ماركت برو</h1>
-        <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-400">أشرف</span>
-          <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-sm font-bold">أ</div>
-        </div>
+        <nav className="flex items-center gap-4 text-sm">
+          <button onClick={() => navigate("/")} className="text-indigo-400 font-semibold">الرئيسية</button>
+          <button onClick={() => navigate("/reports")} className="text-gray-400 hover:text-white">التقارير</button>
+          <button onClick={() => navigate("/settings")} className="text-gray-400 hover:text-white">الإعدادات</button>
+          <button onClick={() => navigate("/login")} className="text-gray-400 hover:text-white">تسجيل الدخول</button>
+        </nav>
       </header>
 
       <main className="p-6 space-y-8 max-w-7xl mx-auto">
-        {/* بطاقات الإحصائيات */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { label: "إجمالي المبيعات", value: "128,430 ر.س", color: "text-green-400" },
@@ -64,7 +66,6 @@ export default function App() {
           ))}
         </div>
 
-        {/* مخطط المبيعات */}
         <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
           <h2 className="text-lg font-semibold mb-4">المبيعات الشهرية</h2>
           <ResponsiveContainer width="100%" height={250}>
@@ -77,7 +78,6 @@ export default function App() {
           </ResponsiveContainer>
         </div>
 
-        {/* جدول المنتجات */}
         <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
           <h2 className="text-lg font-semibold mb-4">المنتجات</h2>
           <div className="flex flex-col sm:flex-row gap-3 mb-4">
@@ -130,7 +130,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* جدول الحملات الإعلانية */}
         <div className="bg-gray-900 rounded-xl p-5 border border-gray-800">
           <h2 className="text-lg font-semibold mb-4">الحملات الإعلانية</h2>
           <div className="overflow-x-auto">
