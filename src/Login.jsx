@@ -16,9 +16,8 @@ export default function Login() {
       <div className="bg-gray-900 border border-gray-800 rounded-2xl p-8 w-full max-w-sm">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-indigo-400">ماركت برو</h1>
-          <p className="text-gray-400 text-sm mt-2">تسجيل الدخول إلى لوحة التحكم</p>
+          <p className="text-gray-400 text-sm mt-2">تسجيل الدخول</p>
         </div>
-
         <div className="space-y-4">
           <div>
             <label className="text-sm text-gray-400 block mb-1">البريد الإلكتروني</label>
@@ -30,7 +29,6 @@ export default function Login() {
               className="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm outline-none focus:border-indigo-500"
             />
           </div>
-
           <div>
             <label className="text-sm text-gray-400 block mb-1">كلمة المرور</label>
             <div className="relative">
@@ -49,14 +47,12 @@ export default function Login() {
               </button>
             </div>
           </div>
-
           <button
             onClick={handleLogin}
             className="w-full bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg py-2 text-sm font-semibold transition"
           >
             تسجيل الدخول
           </button>
-
           <button
             onClick={() => navigate("/")}
             className="w-full text-gray-400 hover:text-white text-sm transition"
